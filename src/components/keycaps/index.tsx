@@ -4,6 +4,7 @@ import { LowProfileKeycap } from "./lowprofile";
 import { LaptopKeycap } from "./laptop";
 import { MinimalKeycap } from "./minimal";
 import { PBTKeycap } from "./pbt";
+import { CatKeycap } from "./cat";
 
 export interface KeycapProps {
     event: KeyEvent;
@@ -20,6 +21,8 @@ const components = {
 
 export const Keycap = (props: KeycapProps) => {
     const style = useKeyStyle(state => state.appearance.style);
+    const skin = useKeyStyle(state => state.appearance.skin);
+    if (skin === "cat" || skin === "line-cat" || skin === "watercolor-cat") return <CatKeycap {...props} skin={skin} />;
     const KeycapComponent = components[style];
     
     return <KeycapComponent {...props} />;

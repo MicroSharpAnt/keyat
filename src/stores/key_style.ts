@@ -9,6 +9,10 @@ import { toast } from "sonner";
 
 export const KEY_STYLE_STORE = "key_style_store";
 
+function normalizeSkin(value: unknown): AppearanceSettings["skin"] {
+    return value === "cat" || value === "line-cat" || value === "watercolor-cat" ? value : "default";
+}
+
 export interface AppearanceSettings {
     monitor: string | null;
     flexDirection: "row" | "column";
@@ -18,6 +22,7 @@ export interface AppearanceSettings {
     animation: "none" | "fade" | "zoom" | "float" | "slide";
     animationDuration: number;
     style: "minimal" | "laptop" | "lowprofile" | "pbt";
+    skin: "default" | "cat" | "line-cat" | "watercolor-cat";
 }
 
 export interface LayoutSettings {
@@ -111,6 +116,7 @@ const createKeyStyleStore = createSyncedStore<KeyStyleStore>(
             animation: "fade",
             animationDuration: 0.25,
             style: "lowprofile",
+            skin: "default",
         },
         layout: {
             showIcon: true,
@@ -191,7 +197,10 @@ const createKeyStyleStore = createSyncedStore<KeyStyleStore>(
                     return;
                 }
                 set(() => ({
-                    appearance: parsedData.appearance,
+                    appearance: {
+                        ...parsedData.appearance,
+                        skin: normalizeSkin(parsedData.appearance.skin),
+                    },
                     layout: parsedData.layout,
                     color: parsedData.color,
                     modifier: parsedData.modifier,
@@ -237,6 +246,18 @@ const createKeyStyleStore = createSyncedStore<KeyStyleStore>(
     (config) => persist(config, {
         name: KEY_STYLE_STORE,
         storage: createJSONStorage(() => tauriStorage),
+        merge: (persisted, current) => {
+            const saved = persisted as Partial<KeyStyleState> | undefined;
+            return {
+                ...current,
+                ...saved,
+                appearance: {
+                    ...current.appearance,
+                    ...saved?.appearance,
+                    skin: normalizeSkin(saved?.appearance?.skin),
+                },
+            };
+        },
     }),
 );
 

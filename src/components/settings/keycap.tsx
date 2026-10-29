@@ -13,6 +13,7 @@ import { AlignHorizontalCenterIcon, AlignLeftIcon, AlignRightIcon, Download01Ico
 import { HugeiconsIcon } from "@hugeicons/react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { CatLetter } from "../keycaps/cat";
 
 export interface KeycapTheme {
     name: string;
@@ -110,6 +111,7 @@ export const colorSchemes: KeycapTheme[] = [
 
 export const KeycapSettings = () => {
     const appearance = useKeyStyle(state => state.appearance);
+    const isCatSkin = appearance.skin === "cat" || appearance.skin === "line-cat" || appearance.skin === "watercolor-cat";
     const setAppearance = useKeyStyle(state => state.setAppearance);
 
     const text = useKeyStyle(state => state.text);
@@ -171,10 +173,36 @@ export const KeycapSettings = () => {
     return <div className="flex flex-col p-6 gap-y-4">
         <h1 className="text-xl font-semibold">Keycap</h1>
 
-        <h2 className="text-sm text-muted-foreground font-medium">Preset</h2>
+        <Item variant="muted">
+            <ItemContent>
+                <ItemTitle>Skin / 皮肤</ItemTitle>
+                <ItemDescription>Choose the original keycaps or cat-shaped letters.</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+                <Select value={appearance.skin ?? "default"} onValueChange={(value) => {
+                    if (value === "default" || value === "cat" || value === "line-cat" || value === "watercolor-cat") setAppearance({ skin: value });
+                }}>
+                    <SelectTrigger className="w-56" aria-label="Skin / 皮肤"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="default">默认 / Default</SelectItem>
+                        <SelectItem value="cat">猫 / Cat</SelectItem>
+                        <SelectItem value="line-cat">简笔猫 / Line Cat</SelectItem>
+                        <SelectItem value="watercolor-cat">水彩猫 / Watercolor Cat</SelectItem>
+                    </SelectContent>
+                </Select>
+            </ItemActions>
+        </Item>
+        {isCatSkin && <div className="rounded-xl bg-muted p-4">
+            <div className="flex justify-center gap-2">
+                {["A", "B", "C", "S"].map(letter => <CatLetter key={letter} letter={letter} size={72} skin={appearance.skin === "default" ? "cat" : appearance.skin} />)}
+            </div>
+            <p className="text-sm text-muted-foreground mt-2">A–Z use uppercase cat illustrations. Other keys keep their labels inside a cat frame. Colors and letter case are fixed; your default skin settings are preserved.</p>
+        </div>}
+
+        <h2 className="text-sm text-muted-foreground font-medium">Default skin preset</h2>
         <Item variant="muted">
             <ItemActions className="w-full">
-                <Select value={appearance.style} onValueChange={onStyleChange}>
+                <Select value={appearance.style} onValueChange={onStyleChange} disabled={isCatSkin}>
                     <SelectTrigger className="w-28">
                         <SelectValue />
                     </SelectTrigger>
@@ -189,7 +217,7 @@ export const KeycapSettings = () => {
                 </Select>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon">
+                        <Button variant="outline" size="icon" disabled={isCatSkin}>
                             <HugeiconsIcon icon={PaintBoardIcon} />
                         </Button>
                     </DropdownMenuTrigger>
@@ -215,7 +243,7 @@ export const KeycapSettings = () => {
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button variant="ghost" size="icon" onClick={randomizeStyle} className="active:rotate-90">
+                <Button variant="ghost" size="icon" onClick={randomizeStyle} className="active:rotate-90" disabled={isCatSkin}>
                     <HugeiconsIcon icon={Refresh01Icon} />
                 </Button>
 
@@ -375,7 +403,7 @@ export const KeycapSettings = () => {
                     </ItemActions>
                 </Item>
                 {
-                    appearance.style !== "minimal" &&
+                    (isCatSkin || appearance.style !== "minimal") &&
                     <Item variant="muted">
                         <ItemContent>
                             <ItemTitle>Press Count</ItemTitle>
@@ -393,7 +421,7 @@ export const KeycapSettings = () => {
         </Collapsible>
 
         {
-            appearance.style !== "minimal" &&
+            !isCatSkin && appearance.style !== "minimal" &&
             <Collapsible>
                 <CollapsibleTrigger>
                     <h2 className="text-sm text-muted-foreground font-medium">Color</h2>

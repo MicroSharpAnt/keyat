@@ -33,6 +33,34 @@ Don't settle for defaults. Every aspect of the visualization is under your contr
 
 <img src="previews/settings.png" alt="Settings Panel" width="600">
 
+### Cat skin
+
+In **Keycap → Skin / 皮肤**, choose **猫 / Cat** to display A–Z as illustrated
+orange cats shaped like uppercase letters. Numbers, punctuation, modifiers and
+other keys keep their labels or icons inside a matching cat frame. Size, press
+feedback and repeat counts remain available. The illustrations use fixed colors
+and uppercase letter shapes; the original styling controls apply to the default
+skin. Switching back to **默认 / Default** restores your existing keycap style.
+The skin selection is saved and included in settings imports and exports; older
+settings without a skin field use Default.
+
+<img src="previews/cat-skin.png" alt="Cat alphabet and special-key skin preview" width="800">
+
+The transparent alphabet atlas is bundled at `public/skins/cat/alphabet.png`.
+It was generated with the built-in image generation tool from the approved
+A/B/C/S concept: rounded ginger cats whose bodies form readable uppercase
+letters, dark brown outlines, cream accents, transparent background. The renderer
+uses measured sprite bounds, so replacing the atlas requires updating those
+bounds in `src/components/keycaps/cat.tsx`.
+
+Choose **简笔猫 / Line Cat** for a second cat skin inspired by hand-drawn
+cat alphabets: black open contours, triangular ears and two dot eyes. All 26
+letters are SVG drawings, with a fine white edge for contrast on dark desktops.
+Other keys use a matching monochrome cat frame. This skin shares the same size,
+press feedback, repeat count and saved-selection behavior as the orange cats.
+
+<img src="previews/line-cat-skin.png" alt="Minimal line-art cat alphabet skin" width="800">
+
 </br>
 
 ## 📥 Installation
@@ -86,3 +114,20 @@ If you want to contribute or build the latest features from the source, ensure y
 ---
 
   Built with 🦀 and ❤️ using <a href="https://v2.tauri.app/">Tauri</a>.
+
+### Watercolor cat skin
+
+Choose **水彩猫 / Watercolor Cat** in Settings → Keycap → Skin for the
+fourth skin. Its transparent A–Z atlas was redrawn from the supplied reference
+with crisp outlines, gray tabbies, cream ginger cats, and calico patches.
+Numbers and special keys use a matching gray-and-cream cat frame. Selection,
+settings imports/exports, size, press animation, and press counts are supported.
+
+<img src="previews/watercolor-cat-skin.png" alt="Watercolor cat alphabet on light and dark backgrounds" width="800">
+
+The 1374 × 1145 transparent PNG is bundled at
+`public/skins/watercolor-cat/alphabet.png`. It was redrawn with the built-in
+imagegen tool. Generation brief: faithfully redraw the reference cat alphabet
+with sharp dark-gray outlines, pink ears and cheeks, gray/cream/calico coloring;
+26 isolated glyphs in a six-column grid; transparent background and letter holes,
+opaque white fur, consistent optical height, and no captions.
